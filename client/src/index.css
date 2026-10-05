@@ -2,14 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800;900&display=swap');
 
 #root {
-    background: url('./assets/unitygrid.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    background-attachment: fixed;
-    background-color: var(--secondary-color);
+    background-color: rgb(3, 1, 64);
     font-family: Nunito Sans, Verdana, sans-serif;
-    height: 100vh;
+    min-height: 100vh;
     --main-color: rgb(217, 29, 242);
     --secondary-color: rgb(3, 1, 64);
     --primary: var(--main-color);

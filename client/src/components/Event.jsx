@@ -1,62 +1,36 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import '../css/Event.css'
 
-const Event = (props) => {
+const formatDate = (value) => {
+    if (!value) return ''
+    const date = new Date(`${String(value).slice(0, 10)}T00:00:00`)
 
-    const [event, setEvent] = useState([])
-    const [time, setTime] = useState([])
-    const [remaining, setRemaining] = useState([])
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const eventData = await EventsAPI.getEventsById(props.id)
-                setEvent(eventData)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [])
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const result = await dates.formatTime(event.time)
-                setTime(result)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [event])
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const timeRemaining = await dates.formatRemainingTime(event.remaining)
-                setRemaining(timeRemaining)
-                dates.formatNegativeTimeRemaining(remaining, event.id)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [event])
-
-    return (
-        <article className='event-information'>
-            <img src={event.image} />
-
-            <div className='event-information-overlay'>
-                <div className='text'>
-                    <h3>{event.title}</h3>
-                    <p><i className="fa-regular fa-calendar fa-bounce"></i> {event.date} <br /> {time}</p>
-                    <p id={`remaining-${event.id}`}>{remaining}</p>
-                </div>
-            </div>
-        </article>
-    )
+    return Number.isNaN(date.getTime())
+        ? value
+        : date.toLocaleDateString(undefined, { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })
 }
+
+const formatTime = (value) => {
+    if (!value) return ''
+    return String(value).slice(0, 5)
+}
+
+const Event = ({ event }) => (
+    <article className='event-information'>
+        {event.image && <img src={event.image} alt='' />}
+        <div className='event-information-overlay'>
+            <div className='event-information-text'>
+                <h3>{event.title}</h3>
+                {(event.date || event.time) && (
+                    <p>
+                        <i className="fa-regular fa-calendar" aria-hidden="true"></i>
+                        {formatDate(event.date)}
+                        {event.time && ` · ${formatTime(event.time)}`}
+                    </p>
+                )}
+            </div>
+        </div>
+    </article>
+)
 
 export default Event
