@@ -1,8 +1,8 @@
 import { pool } from './database.js'
 
 const sampleEvents = [
-    ['Echo Lounge', 'Indie Discovery Night', '2026-11-07', '19:00', '/indie.jpg'],
-    ['Echo Lounge', 'Local Artists Showcase', '2026-12-12', '20:00', '/local.jpg'],
+    ['Echo Lounge', 'Indie Discovery Night', '2026-10-05', '19:00', '/indie.jpg'],
+    ['Echo Lounge', 'Local Artists Showcase', '2026-09-12', '20:00', '/local.jpg'],
     ['Echo Lounge', 'Winter Sound Sessions', '2027-01-23', '19:30', '/winter.jpg'],
     ['House of Blues', 'Blues and Roots Live', '2026-11-14', '19:00', '/blues.jpg'],
     ['House of Blues', 'Saturday Night Showcase', '2026-12-19', '20:00', '/showcase.jpg'],
@@ -55,13 +55,14 @@ const setupDatabase = async () => {
         `)
 
         for (const [locationName, title, date, time, image] of sampleEvents) {
-            const updateValues = [title, date, image, locationName]
+            const updateValues = [title, date, time, image, locationName]
             const result = await client.query(`
                 UPDATE events
-                SET image = $3
+                SET date = $2,
+                    time = $3,
+                    image = $4
                 WHERE title = $1
-                  AND date = $2
-                  AND location_id = (SELECT id FROM locations WHERE name = $4)
+                  AND location_id = (SELECT id FROM locations WHERE name = $5)
             `, updateValues)
 
             if (result.rowCount === 0) {
